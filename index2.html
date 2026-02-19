@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Reminder Anak TI Final 🚀</title>
+
+<style>
+:root {
+  --bg: #0a0f1f;
+  --text: #00bfff;
+  --card: #111a33;
+}
+
+body.light {
+  --bg: #eaf6ff;
+  --text: #003366;
+  --card: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+/* Canvas background */
+#stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* Login box */
+#loginBox {
+  margin-top: 150px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid var(--text);
+  background: transparent;
+  color: var(--text);
+}
+
+button {
+  padding: 10px 20px;
+  margin: 8px;
+  background: transparent;
+  border: 2px solid var(--text);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: var(--text);
+  color: var(--bg);
+  transform: scale(1.1);
+}
+
+.hidden {
+  display: none;
+}
+
+.card {
+  background: var(--card);
+  padding: 20px;
+  margin: 20px auto;
+  width: 300px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px var(--text);
+}
+
+.mosque {
+  font-size: 80px;
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  from { text-shadow: 0 0 10px var(--text); }
+  to { text-shadow: 0 0 40px var(--text); }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h1>🔐 Login Anak TI</h1>
+  <p>Masukkan password dulu bro 😌</p>
+  <input type="password" id="password" placeholder="Password...">
+  <br>
+  <button onclick="login()">Masuk</button>
+  <p id="loginMsg"></p>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent" class="hidden">
+
+<h1>⚡ REMINDER ANAK TI ⚡</h1>
+<p>Koding boleh lanjut, ibadah jangan auto skip 😌</p>
+
+<div class="mosque">🕌</div>
+
+<div class="card">
+  <h3>Countdown Menuju Maghrib</h3>
+  <div id="countdown">Loading...</div>
+</div>
+
+<div class="card">
+  <button onclick="pesan(1)">Lagi Ngoding</button>
+  <button onclick="pesan(2)">Deadline 😭</button>
+  <button onclick="pesan(3)">Mager Mode</button>
+</div>
+
+<div id="output"></div>
+
+<br>
+<button onclick="toggleMode()">🌙 / ☀ Toggle Mode</button>
+
+</div>
+
+<script>
+
+/* ===== LOGIN SYSTEM ===== */
+function login() {
+  let pass = document.getElementById("password").value;
+
+  if (pass === "sumala") {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("mainContent").classList.remove("hidden");
+  } else {
+    document.getElementById("loginMsg").innerHTML = 
+      "Password salah bro, jangan asal compile 😭";
+  }
+}
+
+/* ===== COUNTDOWN MAGHRIB ===== */
+function updateCountdown() {
+  let now = new Date();
+  let maghrib = new Date();
+  maghrib.setHours(18, 0, 0);
+
+  if (now > maghrib) {
+    maghrib.setDate(maghrib.getDate() + 1);
+  }
+
+  let diff = maghrib - now;
+  let jam = Math.floor(diff / (1000 * 60 * 60));
+  let menit = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  let detik = Math.floor((diff % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerHTML =
+    jam + " jam " + menit + " menit " + detik + " detik lagi";
+}
+setInterval(updateCountdown, 1000);
+
+/* ===== PESAN LUCU ===== */
+function pesan(pilih) {
+  let teks = "";
+
+  if (pilih == 1) {
+    teks = "Ngoding boleh debug error, tapi jangan error sama Allah 😭";
+  } else if (pilih == 2) {
+    teks = "Deadline dunia penting, akhirat gak bisa di-extend 😌";
+  } else {
+    teks = "Mager? Wudhu dulu coba. Siapa tau auto semangat ✨";
+  }
+
+  document.getElementById("output").innerHTML = teks;
+}
+
+/* ===== TOGGLE MODE ===== */
+function toggleMode() {
+  document.body.classList.toggle("light");
+}
+
+/* ===== BACKGROUND STARS ===== */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 100; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 2,
+    speed: Math.random() * 0.5
+  });
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#00bfff";
+
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    star.y += star.speed;
+    if (star.y > canvas.height) {
+      star.y = 0;
+    }
+  });
+
+  requestAnimationFrame(drawStars);
+}
+
+drawStars();
+
+</script>
+
+</body>
+</html>
